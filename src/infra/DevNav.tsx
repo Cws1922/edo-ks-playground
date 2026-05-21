@@ -5,6 +5,12 @@ import { KsIconAllApplication } from '@fe-infra/keystone-icons-react';
 const NAV_OPTIONS = [
   { value: '/', label: 'Ads Dashboard' },
   { value: '/campaigns', label: 'Ads Campaign' },
+  { value: '/transactions', label: 'Transactions' },
+  { value: '/payment/p1', label: 'P1 · Manage Payment Portfolios' },
+  { value: '/payment/p2', label: 'P2 · Payment Management' },
+  { value: '/payment/p3', label: 'P3 · Payment Management (Advanced PA)' },
+  { value: '/payment/p4', label: 'P4 · Card Sharing Notice (TTAM)' },
+  { value: '/payment/p5', label: 'P5 · PA Naming Inline Error' },
 ];
 
 export default function DevNav() {
