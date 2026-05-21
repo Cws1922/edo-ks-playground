@@ -28,7 +28,7 @@ export function CreatePortfolioDrawer({ open, onClose, paName, onPaNameChange, s
           <div className="max-w-[500px]">
             <KsInput
               value={paName}
-              onChange={(e: any) => onPaNameChange(typeof e === 'string' ? e : (e?.target?.value ?? e?.detail ?? ''))}
+              onChange={(v: string) => onPaNameChange(v)}
               placeholder="Enter Payment Portfolio name"
               status={showError ? 'error' : undefined}
             />

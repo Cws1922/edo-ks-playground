@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { KsModal, KsCheckbox, KsLink, KsInput } from '@byted-keystone/react';
+import { KsModal, KsCheckbox, KsLink, KsInput, KsButton } from '@byted-keystone/react';
 import { KsIconSearch, KsIconFilledLock, KsIconClose, KsIconInfo } from '@fe-infra/keystone-icons-react';
 import { ALL_COLUMNS, type ColumnKey } from '@/data/transactions';
 
@@ -52,6 +52,8 @@ export function CustomColumnsModal({ open, visibleColumns, onChange, onClose }: 
       open={open}
       title="Custom columns"
       size="lg"
+      onConfirm={apply}
+      onCancel={onClose}
       confirmText="Apply"
       cancelText="Cancel"
       onOpenChange={(o: boolean) => { if (!o) onClose(); }}
@@ -147,19 +149,9 @@ export function CustomColumnsModal({ open, visibleColumns, onChange, onClose }: 
         </div>
       </div>
 
-      {/* Footer custom controls */}
-      <div slot="footerPrepend">
-        <KsLink size="sm" onClick={reset}>Reset to default</KsLink>
-      </div>
-      <div slot="footer" className="flex gap-2 justify-end">
-        <KsLink size="sm" onClick={reset}>Reset to default</KsLink>
-        <span className="flex-1" />
-        <button onClick={onClose} className="px-3 py-1.5 rounded border border-neutral-fillLow text-neutral-highOnSurface tiktok-labelMd hover:bg-neutral-fillLow">
-          Cancel
-        </button>
-        <button onClick={apply} className="px-3 py-1.5 rounded bg-primary-fill text-primary-onFill tiktok-labelMd hover:bg-primary-fillHover">
-          Apply
-        </button>
+      {/* footer-other 插槽：放在内置 Cancel/Apply 按钮左侧 */}
+      <div slot="footer-other">
+        <KsButton variant="text" size="sm" onClick={reset}>Reset to default</KsButton>
       </div>
     </KsModal>
   );

@@ -51,16 +51,16 @@ function Timeline({ events }: { events: TimelineEvent[] }) {
     success: 'bg-success-fillLow text-success-onFillLow',
     error:   'bg-error-fillLow text-error-onFillLow',
     warning: 'bg-warning-fillLow text-warning-onFillLow',
-    info:    'bg-info-fillLow text-info-onFillLow',
+    info:    'bg-primary-fillLow text-primary-onFillLow',   // "info" token 不存在，用 primary 替代
     primary: 'bg-primary-fillLow text-primary-onFillLow',
-    neutral: 'bg-neutral-fillLow text-neutral-onFill',
+    neutral: 'bg-neutral-fillLow text-neutral-onFillLow',  // fillLow 背景用 onFillLow
   };
   const highlightColorMap: Record<TimelineEvent['color'], string> = {
-    success: 'text-success-onFill',
-    error:   'text-error-onFill',
-    warning: 'text-warning-onFill',
-    info:    'text-info-onFill',
-    primary: 'text-primary-onFill',
+    success: 'text-success-onSurface',   // onFill → onSurface（中性背景上的着色文字）
+    error:   'text-error-onSurface',
+    warning: 'text-warning-onSurface',
+    info:    'text-primary-onSurface',   // "info" token 不存在，用 primary 替代
+    primary: 'text-primary-onSurface',
     neutral: 'text-neutral-highOnSurface',
   };
 
@@ -145,9 +145,9 @@ export function TransactionDrawer({ open, transaction, onClose }: TransactionDra
             onActiveTabIdChange={(v: string) => setTab(v as 'details' | 'related' | 'activity')}
             type="lite"
           >
-            <KsTabItem tabId="details"><span slot="header">Details</span></KsTabItem>
-            <KsTabItem tabId="related"><span slot="header">Related ({transaction.document ? 1 : 0})</span></KsTabItem>
-            <KsTabItem tabId="activity"><span slot="header">Activity log</span></KsTabItem>
+            <KsTabItem tabId="details"><span slot="label">Details</span></KsTabItem>
+            <KsTabItem tabId="related"><span slot="label">Related ({transaction.document ? 1 : 0})</span></KsTabItem>
+            <KsTabItem tabId="activity"><span slot="label">Activity log</span></KsTabItem>
           </KsTabs>
         </div>
 

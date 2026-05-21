@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { KsModal, KsButton } from '@byted-keystone/react';
+import { KsModal, KsButton, KsLink } from '@byted-keystone/react';
 
 interface Props {
   open: boolean;
@@ -111,7 +111,7 @@ export function AddPaymentMethodModal({ open, onClose }: Props) {
       {/* Privacy policy */}
       <p className="tiktok-bodySm text-neutral-onSurface mb-5">
         Refer to the{' '}
-        <button className="text-primary-fill hover:underline">TikTok for Business Privacy Policy</button>
+        <KsLink size="sm">TikTok for Business Privacy Policy</KsLink>
       </p>
 
       {/* Footer */}

@@ -75,7 +75,7 @@ export function TransactionTable({
         return (
           <div className="flex items-center gap-1.5">
             <KsStatusDot size="sm" variant={s === 'success' ? 'success' : s === 'failed' ? 'error' : 'inProgress'} />
-            <span className={clsx('tiktok-bodySm', s === 'failed' ? 'text-error-onFill font-medium' : 'text-neutral-highOnSurface')}>{STATUS_LABEL[s]}</span>
+            <span className={clsx('tiktok-bodySm', s === 'failed' ? 'text-error-onSurface' : 'text-neutral-highOnSurface')}>{STATUS_LABEL[s]}</span>
             {s === 'failed' && row.failureReason && (
               <KsTooltip size="md">
                 <span slot="content">{row.failureReason}</span>
@@ -88,12 +88,12 @@ export function TransactionTable({
       case 'cashBalance': {
         const v = row.cashBalance;
         if (v === null) return <span className="tiktok-bodySm text-neutral-lowOnSurface">—</span>;
-        return <span className={clsx('tiktok-labelLg', v > 0 ? 'text-success-onFill' : 'text-error-onFill')}>{formatAmount(v)}</span>;
+        return <span className={clsx('tiktok-labelLg', v > 0 ? 'text-success-onSurface' : 'text-error-onSurface')}>{formatAmount(v)}</span>;
       }
       case 'creditBalance': {
         const v = row.creditBalance;
         if (v === null) return <span className="tiktok-bodySm text-neutral-lowOnSurface">—</span>;
-        return <span className={clsx('tiktok-labelLg', v > 0 ? 'text-success-onFill' : 'text-error-onFill')}>{formatAmount(v)}</span>;
+        return <span className={clsx('tiktok-labelLg', v > 0 ? 'text-success-onSurface' : 'text-error-onSurface')}>{formatAmount(v)}</span>;
       }
       case 'adCredit':
         return <span className="tiktok-bodySm text-neutral-lowOnSurface">—</span>;

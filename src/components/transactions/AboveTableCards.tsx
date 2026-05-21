@@ -50,10 +50,10 @@ export function HighlightCards() {
           ? 'bg-warning-fillLow text-warning-onFillLow'
           : 'bg-error-fillLow text-error-onFillLow';
         const labelColor = c.tone === 'success'
-          ? 'text-success-onFill'
+          ? 'text-success-onSurface'
           : c.tone === 'warning'
-          ? 'text-warning-onFill'
-          : 'text-error-onFill';
+          ? 'text-warning-onSurface'
+          : 'text-error-onSurface';
 
         return (
           <div key={c.label} className={`bg-neutral-surface rounded-md border border-neutral-fillLow border-l-[3px] ${stripe} p-3`}>

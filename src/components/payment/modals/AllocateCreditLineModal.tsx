@@ -116,13 +116,13 @@ export function AllocateCreditLineModal({ open, onClose }: Props) {
       <table className="w-full border border-neutral-fillLow text-sm" style={{ borderCollapse: 'collapse' }}>
         <thead>
           <tr className="bg-neutral-surface2">
-            <th className="text-left px-4 py-3 tiktok-labelLg text-neutral-highOnSurface border border-neutral-fillLow font-medium">
+            <th className="text-left px-4 py-3 tiktok-labelLg text-neutral-highOnSurface border border-neutral-fillLow">
               Payment Portfolio
             </th>
-            <th className="text-left px-4 py-3 tiktok-labelLg text-neutral-highOnSurface border border-neutral-fillLow font-medium w-40">
+            <th className="text-left px-4 py-3 tiktok-labelLg text-neutral-highOnSurface border border-neutral-fillLow w-40">
               % allocated
             </th>
-            <th className="text-left px-4 py-3 tiktok-labelLg text-neutral-highOnSurface border border-neutral-fillLow font-medium w-80">
+            <th className="text-left px-4 py-3 tiktok-labelLg text-neutral-highOnSurface border border-neutral-fillLow w-80">
               <span className="flex items-center gap-1">
                 Allocated credit line breakdown
                 <KsIconHelp size={14} className="text-neutral-lowOnSurface" />

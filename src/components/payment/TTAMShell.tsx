@@ -6,7 +6,7 @@ interface Props {
 
 function IconNavItem({ icon, active = false }: { icon: React.ReactNode; active?: boolean }) {
   return (
-    <div className={`w-10 h-10 flex items-center justify-center rounded cursor-pointer ${active ? 'bg-[#e8fbf9]' : 'hover:bg-neutral-surface2'}`}>
+    <div className={`w-10 h-10 flex items-center justify-center rounded cursor-pointer ${active ? 'bg-primary-surface1' : 'hover:bg-neutral-surface2'}`}>
       <span className={active ? 'text-primary-fill' : 'text-neutral-onSurface'}>{icon}</span>
     </div>
   );
@@ -14,7 +14,7 @@ function IconNavItem({ icon, active = false }: { icon: React.ReactNode; active?:
 
 function SubNavItem({ icon, label, active = false }: { icon: React.ReactNode; label: string; active?: boolean }) {
   return (
-    <div className={`flex items-center gap-2 px-3 py-2 cursor-pointer rounded mx-1 ${active ? 'text-primary-onsurface' : 'text-neutral-onSurface hover:bg-neutral-surface2'}`}>
+    <div className={`flex items-center gap-2 px-3 py-2 cursor-pointer rounded mx-1 ${active ? 'text-primary-onSurface' : 'text-neutral-onSurface hover:bg-neutral-surface2'}`}>
       <span className={`flex-shrink-0 ${active ? 'text-primary-fill' : 'text-neutral-lowOnSurface'}`}>{icon}</span>
       <span className="tiktok-labelMd">{label}</span>
     </div>
@@ -38,14 +38,14 @@ export function TTAMShell({ children }: Props) {
         <div className="flex-1" />
         {/* Right controls */}
         <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/10">
-          <KsIconSearch size={18} className="text-[#9ca3af]" />
+          <KsIconSearch size={18} className="text-neutral-fill" />
         </button>
         <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/10 relative">
-          <KsIconBell size={18} className="text-[#9ca3af]" />
-          <span className="absolute top-0.5 right-0.5 bg-[#ef4444] text-white text-[8px] font-medium rounded-full min-w-[14px] h-[14px] flex items-center justify-center px-0.5">2</span>
+          <KsIconBell size={18} className="text-neutral-fill" />
+          <span className="absolute top-0.5 right-0.5 bg-error-fill text-error-onFill text-[8px] font-medium rounded-full min-w-[14px] h-[14px] flex items-center justify-center px-0.5">2</span>
         </button>
         <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/10">
-          <KsIconHelp size={18} className="text-[#9ca3af]" />
+          <KsIconHelp size={18} className="text-neutral-fill" />
         </button>
         <div className="flex items-center gap-1.5 border border-[#3a3e4a] rounded px-2.5 py-1.5 cursor-pointer hover:border-[#5a5e6a] ml-1">
           <span className="text-white text-xs leading-none">upstream.land</span>

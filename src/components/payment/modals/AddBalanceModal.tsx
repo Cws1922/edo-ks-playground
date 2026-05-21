@@ -33,7 +33,7 @@ export function AddBalanceModal({ open, onClose }: Props) {
         <p className="tiktok-labelLg text-neutral-highOnSurface mb-1.5">To: Payment Portfolio</p>
         <div className="flex items-center gap-2 flex-wrap">
           <span className="tiktok-bodySm text-neutral-highOnSurface">{PA_NAME}</span>
-          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] bg-info-fillLow text-info-highOnSurface border border-info-fillLow">Standard</span>
+          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] bg-primary-fillLow text-primary-onFillLow border border-primary-fillLow">Standard</span>
           <span className="tiktok-labelSm text-neutral-onSurface ml-auto">ID: {PA_ID}</span>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { KsLink, KsTooltip, KsModal, KsButton } from '@byted-keystone/react';
+import { KsLink, KsTooltip, KsModal, KsButton, KsCheckbox } from '@byted-keystone/react';
 import { KsIconInfo, KsIconClose, KsIconSearch, KsIconReceipt, KsIconFilledWarning } from '@fe-infra/keystone-icons-react';
 
 /** D1 — Top banner education bar */
@@ -82,10 +82,9 @@ export function FirstVisitModal({ open, onClose }: { open: boolean; onClose: () 
       </div>
       <div className="border-t border-neutral-fillLow pt-3 flex items-center justify-between">
         <label className="flex items-center gap-2 tiktok-bodySm text-neutral-lowOnSurface cursor-pointer">
-          <input
-            type="checkbox"
+          <KsCheckbox
             checked={dontShow}
-            onChange={(e) => setDontShow(e.target.checked)}
+            onChange={(v: boolean) => setDontShow(v)}
           />
           Don't show again
         </label>
