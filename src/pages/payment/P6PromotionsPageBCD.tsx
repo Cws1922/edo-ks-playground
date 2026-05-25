@@ -159,11 +159,11 @@ function CreditDrawer({ credit, open, onClose }: {
       size="md"
       onOpenChange={(o: boolean) => { if (!o) onClose(); }}
     >
-      <div className="flex flex-col divide-y divide-neutral-fillLow">
+      <div className="flex flex-col gap-6">
 
-        {/* Alert banner */}
+        {/* Alert banner — module (conditional) */}
         {isUnassigned && (
-          <div className="px-5 pt-5 pb-4">
+          <div className="bg-neutral-surface rounded-lg p-6">
             <KsInlineAlert
               variant="warning"
               title="Action required — credit not activated"
@@ -172,7 +172,7 @@ function CreditDrawer({ credit, open, onClose }: {
           </div>
         )}
         {unmetCount > 0 && (
-          <div className="px-5 pt-5 pb-4">
+          <div className="bg-neutral-surface rounded-lg p-6">
             <KsInlineAlert
               variant="info"
               title={`${unmetCount} condition${unmetCount > 1 ? 's' : ''} not met`}
@@ -181,8 +181,8 @@ function CreditDrawer({ credit, open, onClose }: {
           </div>
         )}
 
-        {/* Credit overview */}
-        <div className="px-5 py-4">
+        {/* Credit overview — module */}
+        <div className="bg-neutral-surface rounded-lg p-6">
           <div className="flex items-center gap-2 mb-1">
             <span className="tiktok-headlineSm text-neutral-highOnSurface">{fmt(available)} {credit.currency}</span>
             <TypeBadge type={credit.type} />
@@ -195,8 +195,8 @@ function CreditDrawer({ credit, open, onClose }: {
           </div>
         </div>
 
-        {/* Details */}
-        <div className="px-5 py-4">
+        {/* Details — module */}
+        <div className="bg-neutral-surface rounded-lg p-6">
           <div className="tiktok-labelMd text-neutral-lowOnSurface uppercase tracking-wide mb-2" style={{ fontSize: '11px', letterSpacing: '0.06em' }}>
             Details
           </div>
@@ -210,8 +210,8 @@ function CreditDrawer({ credit, open, onClose }: {
           )}
         </div>
 
-        {/* How to use */}
-        <div className="px-5 py-4">
+        {/* How to use — module */}
+        <div className="bg-primary-surface1 rounded-lg p-6">
           <div className="tiktok-labelMd text-neutral-lowOnSurface uppercase tracking-wide mb-3" style={{ fontSize: '11px', letterSpacing: '0.06em' }}>
             How to use
           </div>
@@ -284,9 +284,9 @@ function CreditDrawer({ credit, open, onClose }: {
           )}
         </div>
 
-        {/* Footer actions */}
+        {/* Footer actions — module (conditional) */}
         {(isUnassigned || isAssigned) && (
-          <div className="px-5 py-4 flex gap-2">
+          <div className="bg-neutral-surface rounded-lg p-6 flex gap-2">
             {isUnassigned && <KsButton variant="primary" size="md">Assign to campaigns</KsButton>}
             {isAssigned   && <KsButton variant="default" size="md">Manage assignments</KsButton>}
             <KsButton variant="default" size="md" onClick={onClose}>Close</KsButton>
@@ -347,10 +347,10 @@ export default function P6PromotionsPageBCD() {
           <KsText variant="headlineLg" color="neutralHigh">Promotions</KsText>
         </div>
 
-        {/* Summary card — Total + Free / Conditional / Assignable breakdown */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl mb-4 flex items-stretch">
-          {/* Total available */}
-          <div className="px-6 py-5 flex flex-col justify-center gap-1 shrink-0">
+        {/* Summary card — Total | divider (48px each side) | Free / Conditional / Assignable (72px gaps) */}
+        <div className="bg-neutral-surface rounded-xl mb-4 flex items-stretch px-6">
+          {/* Total available — content-width */}
+          <div className="py-5 flex flex-col justify-center gap-1">
             <span className="tiktok-labelMd text-neutral-onSurface">Total available ad credit</span>
             <div className="flex items-baseline gap-1.5 mt-1">
               <span className="tiktok-headlineLg text-neutral-highOnSurface">3,155.00</span>
@@ -358,16 +358,16 @@ export default function P6PromotionsPageBCD() {
             </div>
           </div>
 
-          {/* Vertical divider */}
-          <div className="border-l border-neutral-fillLow my-4" />
+          {/* Divider: 1px, Neutral/Fill-low, 24px vertical inset, 48px horizontal gap */}
+          <div className="w-px bg-neutral-fillLow my-6 shrink-0 mx-[48px]" />
 
-          {/* Per-type breakdown */}
+          {/* Per-type breakdown: content-width, 72px gaps between adjacent fields */}
           {[
-            { label: 'Free',        value: '700.00'   },
-            { label: 'Conditional', value: '705.00'   },
-            { label: 'Assignable',  value: '1,750.00' },
-          ].map(t => (
-            <div key={t.label} className="flex-1 px-6 py-5 flex flex-col justify-center gap-1">
+            { label: 'Free credits',        value: '700.00'   },
+            { label: 'Conditional credits', value: '705.00'   },
+            { label: 'Assignable credits',  value: '1,750.00' },
+          ].map((t, i) => (
+            <div key={t.label} className={`py-5 flex flex-col justify-center gap-1${i > 0 ? ' ml-[72px]' : ''}`}>
               <div className="flex items-center gap-1">
                 <span className="tiktok-labelMd text-neutral-onSurface">{t.label}</span>
                 <KsIconHelp size={13} className="text-neutral-lowOnSurface flex-shrink-0" />
@@ -381,7 +381,7 @@ export default function P6PromotionsPageBCD() {
         </div>
 
         {/* Main card */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl overflow-hidden">
+        <div className="bg-neutral-surface rounded-xl overflow-hidden">
 
           {/* ── Tab bar (KsTabs lite md) ── */}
           <div className="px-5 pt-3 border-b border-neutral-fillLow">

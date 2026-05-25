@@ -57,7 +57,7 @@ export default function P3PaymentManagementPage() {
         </div>
 
         {/* PA selector */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl mb-4 px-5 py-4 flex items-center gap-3">
+        <div className="bg-neutral-surface rounded-xl mb-4 px-5 py-4 flex items-center gap-3">
           <span className="tiktok-labelLg text-neutral-highOnSurface">Payment Portfolio</span>
           <KsIconHelp size={14} className="text-neutral-lowOnSurface" />
           <div className="flex items-center gap-2 ml-3 px-3 py-1.5 border border-neutral-fillLow rounded-lg bg-neutral-surface2 cursor-pointer hover:bg-neutral-fillLow transition-colors">
@@ -69,7 +69,7 @@ export default function P3PaymentManagementPage() {
         </div>
 
         {/* Metrics card */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl mb-4 flex">
+        <div className="bg-neutral-surface rounded-xl mb-4 flex">
           {/* Credit line */}
           <div className="flex-1 px-5 py-5 flex flex-col gap-2 min-w-0">
             <div className="flex items-center gap-1">
@@ -154,7 +154,7 @@ export default function P3PaymentManagementPage() {
         </div>
 
         {/* Ad account table */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl overflow-hidden">
+        <div className="bg-neutral-surface rounded-xl overflow-hidden">
           {/* Tabs */}
           <div className="px-5 pt-4">
             <div className="flex items-center gap-4 mb-3">

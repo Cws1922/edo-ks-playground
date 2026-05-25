@@ -68,7 +68,7 @@ export default function P1ManagePortfoliosPage() {
         </div>
 
         {/* ─── Top card ─── */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl mb-4">
+        <div className="bg-neutral-surface rounded-xl mb-4">
           <div className="px-6 py-4">
             <span className="tiktok-titleLg text-neutral-highOnSurface">
               Business: &#123;Company name&#125;
@@ -127,7 +127,7 @@ export default function P1ManagePortfoliosPage() {
         </div>
 
         {/* ─── Payment Portfolios section — white card ─── */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl overflow-hidden">
+        <div className="bg-neutral-surface rounded-xl overflow-hidden">
 
           {/* Section header */}
           <div className="px-6 pt-5 pb-4">

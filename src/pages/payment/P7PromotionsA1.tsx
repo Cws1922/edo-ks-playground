@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   KsButton, KsText, KsTag, KsDrawer, KsInlineAlert, KsStatusMessage,
-  KsTabs, KsTabItem,
+  KsTabs, KsTabItem, KsTooltip,
 } from '@byted-keystone/react';
 import {
   KsIconFilledWarning, KsIconFilledCheck,
@@ -90,10 +90,11 @@ function NotAvailableDrawer({ credit, open, onClose }: {
       size="md"
       onOpenChange={(o: boolean) => { if (!o) onClose(); }}
     >
-      <div className="flex flex-col divide-y divide-neutral-fillLow">
+      {/* Scrollable content modules */}
+      <div className="flex flex-col gap-6">
 
-        {/* Credit overview */}
-        <div className="px-5 py-4">
+        {/* Credit overview — module */}
+        <div className="bg-neutral-surface rounded-lg p-6">
           <div className="flex items-center gap-2 mb-1">
             <span className="tiktok-headlineSm text-neutral-highOnSurface">{credit.amount} {credit.currency}</span>
             <KsTag variant={meta.tagVariant} size="sm">{meta.label}</KsTag>
@@ -101,21 +102,8 @@ function NotAvailableDrawer({ credit, open, onClose }: {
           <div className="tiktok-labelSm text-neutral-lowOnSurface">{meta.dateLabel} {credit.stateDate}</div>
         </div>
 
-        {/* State status message */}
-        <div className="px-5 py-4">
-          {credit.state === 'used' && (
-            <KsStatusMessage variant="neutral" richTextString="Credit fully used — deducted from billing" />
-          )}
-          {credit.state === 'expired' && (
-            <KsStatusMessage variant="warning" richTextString="Credit expired — unused balance forfeited" />
-          )}
-          {credit.state === 'suspended' && (
-            <KsStatusMessage variant="error" richTextString={`Suspended: ${credit.suspendReason}`} />
-          )}
-        </div>
-
-        {/* Details */}
-        <div className="px-5 py-4">
+        {/* Details — module (status message below KV rows) */}
+        <div className="bg-neutral-surface rounded-lg p-6">
           <div className="tiktok-labelMd text-neutral-lowOnSurface uppercase tracking-wide mb-2" style={{ fontSize: '11px', letterSpacing: '0.06em' }}>
             Details
           </div>
@@ -139,16 +127,33 @@ function NotAvailableDrawer({ credit, open, onClose }: {
               <KVRow label="Reason"       value={credit.suspendReason ?? '—'} />
             </>
           )}
-        </div>
 
-        {/* Footer CTA */}
-        {(credit.state === 'expired' || credit.state === 'suspended') && (
-          <div className="px-5 py-4 flex gap-2">
-            <KsButton variant="default" size="md">Contact support</KsButton>
-            <KsButton variant="default" size="md" onClick={onClose}>Close</KsButton>
-          </div>
-        )}
+          {/* Supplementary status info — below KV rows */}
+          {credit.state === 'used' && (
+            <div className="mt-4">
+              <KsStatusMessage variant="neutral" richTextString="Credit fully used — deducted from billing" />
+            </div>
+          )}
+          {credit.state === 'expired' && (
+            <div className="mt-4">
+              <KsStatusMessage variant="warning" richTextString="Credit expired — unused balance forfeited" />
+            </div>
+          )}
+          {credit.state === 'suspended' && (
+            <div className="mt-4">
+              <KsStatusMessage variant="error" richTextString={`Suspended: ${credit.suspendReason}`} />
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Footer — drawer footer slot (same level as header), right-aligned, Close = primary */}
+      {(credit.state === 'expired' || credit.state === 'suspended') && (
+        <div slot="footer" className="flex justify-end gap-2 w-full">
+          <KsButton variant="default" size="md">Contact support</KsButton>
+          <KsButton variant="primary" size="md" onClick={onClose}>Close</KsButton>
+        </div>
+      )}
     </KsDrawer>
   );
 }
@@ -156,9 +161,10 @@ function NotAvailableDrawer({ credit, open, onClose }: {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function P7PromotionsA1() {
-  const [activeTab, setActiveTab]     = useState<TabType>('notAvailable');
-  const [selected, setSelected]       = useState<NotAvailableCredit | null>(null);
-  const [drawerOpen, setDrawerOpen]   = useState(false);
+  const [activeTab, setActiveTab]           = useState<TabType>('notAvailable');
+  const [notAvailableSubTab, setSubTab]     = useState<NotAvailableState>('used');
+  const [selected, setSelected]             = useState<NotAvailableCredit | null>(null);
+  const [drawerOpen, setDrawerOpen]         = useState(false);
 
   const grouped: Record<NotAvailableState, NotAvailableCredit[]> = {
     used:      NOT_AVAILABLE_CREDITS.filter(c => c.state === 'used'),
@@ -187,22 +193,25 @@ export default function P7PromotionsA1() {
           <KsText variant="headlineLg" color="neutralHigh">Promotions</KsText>
         </div>
 
-        {/* Summary card — Total + Free / Conditional / Assignable */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl mb-4 flex items-stretch">
-          <div className="px-6 py-5 flex flex-col justify-center gap-1 shrink-0">
+        {/* Summary card — Total | divider (48px each side) | Free / Conditional / Assignable (72px gaps) */}
+        <div className="bg-neutral-surface rounded-xl mb-4 flex items-stretch px-6">
+          <div className="py-5 flex flex-col justify-center gap-1">
             <span className="tiktok-labelMd text-neutral-onSurface">Total available ad credit</span>
             <div className="flex items-baseline gap-1.5 mt-1">
               <span className="tiktok-headlineLg text-neutral-highOnSurface">3,155.00</span>
               <span className="tiktok-bodyMd text-neutral-onSurface">USD</span>
             </div>
           </div>
-          <div className="border-l border-neutral-fillLow my-4" />
+
+          {/* Divider: 1px, Neutral/Fill-low, 24px vertical inset, 48px horizontal gap */}
+          <div className="w-px bg-neutral-fillLow my-6 shrink-0 mx-[48px]" />
+
           {[
-            { label: 'Free',        value: '700.00'   },
-            { label: 'Conditional', value: '705.00'   },
-            { label: 'Assignable',  value: '1,750.00' },
-          ].map(t => (
-            <div key={t.label} className="flex-1 px-6 py-5 flex flex-col justify-center gap-1">
+            { label: 'Free credits',        value: '700.00'   },
+            { label: 'Conditional credits', value: '705.00'   },
+            { label: 'Assignable credits',  value: '1,750.00' },
+          ].map((t, i) => (
+            <div key={t.label} className={`py-5 flex flex-col justify-center gap-1${i > 0 ? ' ml-[72px]' : ''}`}>
               <div className="flex items-center gap-1">
                 <span className="tiktok-labelMd text-neutral-onSurface">{t.label}</span>
                 <KsIconHelp size={13} className="text-neutral-lowOnSurface flex-shrink-0" />
@@ -216,7 +225,7 @@ export default function P7PromotionsA1() {
         </div>
 
         {/* Main card */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl overflow-hidden">
+        <div className="bg-neutral-surface rounded-xl overflow-hidden">
           {/* Tab bar — KsTabs lite md */}
           <div className="px-5 pt-3 border-b border-neutral-fillLow">
             <KsTabs
@@ -248,47 +257,62 @@ export default function P7PromotionsA1() {
 
           {/* ── Not available tab (Solution A1) ── */}
           {activeTab === 'notAvailable' && (
-            <div className="p-5 flex flex-col gap-6">
-              <KsInlineAlert
-                variant="info"
-                content="Solution A1: Three states differentiated by color, label and drawer explanation — no new backend states required."
-              />
+            <div className="flex flex-col">
+              {/* Demo info */}
+              <div className="px-5 py-4">
+                <KsInlineAlert
+                  variant="info"
+                  content="Solution A1: Three states differentiated by color, label and drawer explanation — no new backend states required."
+                />
+              </div>
 
-              {/* Group: Used */}
-              {grouped.used.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <KsIconFilledCheck size={14} className="text-neutral-onSurface" />
-                    <span className="tiktok-titleSm text-neutral-highOnSurface">Used ({grouped.used.length})</span>
-                    <span className="tiktok-labelSm text-neutral-lowOnSurface">— fully consumed, no balance remaining</span>
-                  </div>
+              {/* Sub-tab bar — no bottom border, tooltip icons per tab */}
+              <div className="px-5">
+                <KsTabs
+                  type="sub-tab"
+                  size="md"
+                  activeTabId={notAvailableSubTab}
+                  onActiveTabIdChange={(id: string) => setSubTab(id as NotAvailableState)}
+                >
+                  <KsTabItem tabId="used">
+                    <span slot="header" className="inline-flex items-center gap-1">
+                      Used ({grouped.used.length})
+                      <KsTooltip content="Credits fully consumed — no balance remaining" placement="top">
+                        <KsIconHelp size={12} className="text-neutral-lowOnSurface" />
+                      </KsTooltip>
+                    </span>
+                  </KsTabItem>
+                  <KsTabItem tabId="expired">
+                    <span slot="header" className="inline-flex items-center gap-1">
+                      Expired ({grouped.expired.length})
+                      <KsTooltip content="Credits that reached expiry without being fully used" placement="top">
+                        <KsIconHelp size={12} className="text-neutral-lowOnSurface" />
+                      </KsTooltip>
+                    </span>
+                  </KsTabItem>
+                  <KsTabItem tabId="suspended">
+                    <span slot="header" className="inline-flex items-center gap-1">
+                      Suspended ({grouped.suspended.length})
+                      <KsTooltip content="Credits paused due to an account policy issue" placement="top">
+                        <KsIconHelp size={12} className="text-neutral-lowOnSurface" />
+                      </KsTooltip>
+                    </span>
+                  </KsTabItem>
+                </KsTabs>
+              </div>
+
+              {/* Sub-tab content — table edge-to-edge (no horizontal padding) */}
+              <div className="py-4">
+                {notAvailableSubTab === 'used' && (
                   <CreditGroupTable credits={grouped.used} onRowClick={openCredit} />
-                </div>
-              )}
-
-              {/* Group: Expired */}
-              {grouped.expired.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <KsIconClock size={14} className="text-warning-onSurface" />
-                    <span className="tiktok-titleSm text-neutral-highOnSurface">Expired ({grouped.expired.length})</span>
-                    <span className="tiktok-labelSm text-neutral-lowOnSurface">— reached expiry date without full use</span>
-                  </div>
+                )}
+                {notAvailableSubTab === 'expired' && (
                   <CreditGroupTable credits={grouped.expired} onRowClick={openCredit} />
-                </div>
-              )}
-
-              {/* Group: Suspended */}
-              {grouped.suspended.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <KsIconFilledWarning size={14} className="text-error-onSurface" />
-                    <span className="tiktok-titleSm text-neutral-highOnSurface">Suspended ({grouped.suspended.length})</span>
-                    <span className="tiktok-labelSm text-neutral-lowOnSurface">— credit paused due to account issue</span>
-                  </div>
+                )}
+                {notAvailableSubTab === 'suspended' && (
                   <CreditGroupTable credits={grouped.suspended} onRowClick={openCredit} />
-                </div>
-              )}
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -309,7 +333,7 @@ function CreditGroupTable({
   onRowClick: (c: NotAvailableCredit) => void;
 }) {
   return (
-    <div className="rounded-xl border border-neutral-fillLow overflow-hidden">
+    <div className="overflow-hidden">
       <table className="w-full text-sm table-fixed" style={{ borderCollapse: 'collapse' }}>
         <thead>
           <tr className="bg-neutral-surface2">

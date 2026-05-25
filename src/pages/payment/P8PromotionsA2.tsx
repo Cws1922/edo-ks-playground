@@ -102,10 +102,10 @@ function NotAvailableDrawer({ credit, open, onClose }: {
       size="md"
       onOpenChange={(o: boolean) => { if (!o) onClose(); }}
     >
-      <div className="flex flex-col divide-y divide-neutral-fillLow">
+      <div className="flex flex-col gap-6">
 
-        {/* Credit overview */}
-        <div className="px-5 py-4">
+        {/* Credit overview — module */}
+        <div className="bg-neutral-surface rounded-lg p-6">
           <div className="flex items-center gap-2 mb-1">
             <span className="tiktok-headlineSm text-neutral-highOnSurface">{credit.amount} {credit.currency}</span>
             <KsTag variant={meta.tagVariant} size="sm">{meta.label}</KsTag>
@@ -117,8 +117,8 @@ function NotAvailableDrawer({ credit, open, onClose }: {
           </div>
         </div>
 
-        {/* State status + context */}
-        <div className="px-5 py-4">
+        {/* State status + context — module */}
+        <div className="bg-neutral-surface rounded-lg p-6">
           {credit.state === 'pendingPayout' && (
             <>
               <KsStatusMessage variant="success" richTextString="Goal reached — credit being processed" />
@@ -143,8 +143,8 @@ function NotAvailableDrawer({ credit, open, onClose }: {
           )}
         </div>
 
-        {/* Details */}
-        <div className="px-5 py-4">
+        {/* Details — module */}
+        <div className="bg-neutral-surface rounded-lg p-6">
           <div className="tiktok-labelMd text-neutral-lowOnSurface uppercase tracking-wide mb-2" style={{ fontSize: '11px', letterSpacing: '0.06em' }}>
             Details
           </div>
@@ -177,15 +177,15 @@ function NotAvailableDrawer({ credit, open, onClose }: {
           )}
         </div>
 
-        {/* Footer CTAs */}
+        {/* Footer CTAs — module (conditional) */}
         {(credit.state === 'expired' || credit.state === 'suspended') && (
-          <div className="px-5 py-4 flex gap-2">
+          <div className="bg-neutral-surface rounded-lg p-6 flex gap-2">
             <KsButton variant="default" size="md">Contact support</KsButton>
             <KsButton variant="default" size="md" onClick={onClose}>Close</KsButton>
           </div>
         )}
         {credit.state === 'pendingPayout' && (
-          <div className="px-5 py-4">
+          <div className="bg-neutral-surface rounded-lg p-6">
             <button className="tiktok-labelSm text-primary-fill hover:underline">
               Questions about your payout? Contact support →
             </button>
@@ -259,9 +259,9 @@ export default function P8PromotionsA2() {
           </div>
           <div className="border-l border-neutral-fillLow my-4" />
           {[
-            { label: 'Free',        value: '700.00'   },
-            { label: 'Conditional', value: '705.00'   },
-            { label: 'Assignable',  value: '1,750.00' },
+            { label: 'Free credits',        value: '700.00'   },
+            { label: 'Conditional credits', value: '705.00'   },
+            { label: 'Assignable credits',  value: '1,750.00' },
           ].map(t => (
             <div key={t.label} className="flex-1 px-6 py-5 flex flex-col justify-center gap-1">
               <div className="flex items-center gap-1">

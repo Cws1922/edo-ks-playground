@@ -103,7 +103,7 @@ export default function P4PaymentPage() {
         </div>
 
         {/* Budget card */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl mb-4 px-6 py-5">
+        <div className="bg-neutral-surface rounded-xl mb-4 px-6 py-5">
           <div className="flex items-start justify-between mb-3">
             <div>
               <KsText variant="titleMd" color="neutralHigh">Budget</KsText>
@@ -147,7 +147,7 @@ export default function P4PaymentPage() {
         </div>
 
         {/* Payment Portfolio card */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl">
+        <div className="bg-neutral-surface rounded-xl">
           {/* PA Header */}
           <div className="px-6 py-4 flex items-center gap-2 border-b border-neutral-fillLow">
             <span className="tiktok-labelLg text-neutral-highOnSurface">Payment Portfolio</span>
