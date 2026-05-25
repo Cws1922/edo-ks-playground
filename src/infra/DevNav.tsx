@@ -11,6 +11,9 @@ const NAV_OPTIONS = [
   { value: '/payment/p3', label: 'P3 · Payment Management (Advanced PA)' },
   { value: '/payment/p4', label: 'P4 · Card Sharing Notice (TTAM)' },
   { value: '/payment/p5', label: 'P5 · PA Naming Inline Error' },
+  { value: '/payment/p6', label: 'P6 · Promotions — Direction B+C+D (Available & Earning)' },
+  { value: '/payment/p7', label: 'P7 · Promotions — Solution A1 (Not available: 3 states)' },
+  { value: '/payment/p8', label: 'P8 · Promotions — Solution A2 (Not available: +Pending Payout)' },
 ];
 
 export default function DevNav() {

@@ -162,7 +162,7 @@ export default function P2PaymentManagementPage() {
             </div>
           </div>
 
-          <div className="px-5 py-3 flex items-center gap-2 border-b border-neutral-fillLow">
+          <div className="px-5 py-3 flex items-center gap-2">
             <div className="max-w-[260px] w-full flex items-center border border-neutral-fillLow rounded h-8 px-2 gap-1 bg-neutral-surface">
               <KsIconSearch size={13} className="text-neutral-lowOnSurface flex-shrink-0" />
               <input

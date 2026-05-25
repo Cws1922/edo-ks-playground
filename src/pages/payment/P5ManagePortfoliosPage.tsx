@@ -124,7 +124,7 @@ export default function P5ManagePortfoliosPage() {
           </div>
 
           {/* Filters */}
-          <div className="px-6 py-3 flex items-center gap-3 border-b border-neutral-fillLow">
+          <div className="px-6 py-3 flex items-center gap-3">
             <div className="flex items-center gap-1.5">
               <span className="tiktok-labelSm text-neutral-onSurface">Portfolio type</span>
               <button className="flex items-center gap-1 px-3 py-1.5 border border-neutral-fillLow rounded tiktok-labelSm text-neutral-highOnSurface bg-neutral-surface hover:bg-neutral-surface2">

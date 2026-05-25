@@ -15,6 +15,9 @@ import P2PaymentManagementPage from '@/pages/payment/P2PaymentManagementPage';
 import P3PaymentManagementPage from '@/pages/payment/P3PaymentManagementPage';
 import P4PaymentPage from '@/pages/payment/P4PaymentPage';
 import P5ManagePortfoliosPage from '@/pages/payment/P5ManagePortfoliosPage';
+import P6PromotionsPageBCD from '@/pages/payment/P6PromotionsPageBCD';
+import P7PromotionsA1 from '@/pages/payment/P7PromotionsA1';
+import P8PromotionsA2 from '@/pages/payment/P8PromotionsA2';
 import { installKeystoneOverlayCompat } from '@/infra/keystoneOverlayCompat';
 
 if (import.meta.env.DEV) {
@@ -37,6 +40,9 @@ createRoot(document.getElementById('root')!).render(
           <Route path="payment/p3" element={<P3PaymentManagementPage />} />
           <Route path="payment/p4" element={<P4PaymentPage />} />
           <Route path="payment/p5" element={<P5ManagePortfoliosPage />} />
+          <Route path="payment/p6" element={<P6PromotionsPageBCD />} />
+          <Route path="payment/p7" element={<P7PromotionsA1 />} />
+          <Route path="payment/p8" element={<P8PromotionsA2 />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
