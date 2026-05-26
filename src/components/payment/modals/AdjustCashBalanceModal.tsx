@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { KsModal, KsButton, KsTabs, KsTabItem, KsTag, KsStatusMessage } from '@byted-keystone/react';
+import { KsIconPlus, KsIconMinus } from '@fe-infra/keystone-icons-react';
 import type { DemoState } from './AdjustCreditCompanyModal';
 
 interface Props {
@@ -16,19 +17,27 @@ const TRANSFERABLE_NORMAL = 1000;
 const TRANSFERABLE_STATE_B = 5;
 const MIN_AMOUNT = 10;
 
-function Tile({ label, description, selected, onClick }: {
-  label: string; description: string; selected: boolean; onClick: () => void;
+function Tile({ icon, label, description, selected, onClick }: {
+  icon: React.ReactNode; label: string; description: string; selected: boolean; onClick: () => void;
 }) {
   return (
     <button
       onClick={onClick}
       className={`flex-1 text-left p-4 rounded-lg border transition-colors ${
         selected
-          ? 'border-primary-fill bg-primary-fillLow'
-          : 'border-neutral-fillLow bg-neutral-surface hover:bg-neutral-surface2'
+          ? 'border-primary-fill bg-neutral-surface'
+          : 'border-neutral-fillLow bg-neutral-surface2 hover:bg-neutral-fillLow'
       }`}
     >
-      <p className={`tiktok-labelLg mb-0.5 ${selected ? 'text-primary-fill' : 'text-neutral-highOnSurface'}`}>{label}</p>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-1.5 tiktok-labelLg text-neutral-highOnSurface">
+          {icon}
+          <span>{label}</span>
+        </div>
+        <div className={`w-5 h-5 rounded-full flex-shrink-0 bg-neutral-surface transition-all ${
+          selected ? 'border-[6px] border-primary-fill' : 'border-2 border-neutral-fillLow'
+        }`} />
+      </div>
       <p className="tiktok-bodySm text-neutral-onSurface">{description}</p>
     </button>
   );
@@ -55,12 +64,14 @@ export function AdjustCashBalanceModal({ open, onClose, demoState, adAccountName
       {/* Direction toggle */}
       <div className="flex gap-3 mb-4">
         <Tile
+          icon={<KsIconPlus size={16} />}
           label="Add balance"
           description="Add cash to ad account"
           selected={direction === 'add'}
           onClick={() => setDirection('add')}
         />
         <Tile
+          icon={<KsIconMinus size={16} />}
           label="Decrease balance"
           description="Transfer cash back to payment portfolio for reallocation"
           selected={direction === 'decrease'}
