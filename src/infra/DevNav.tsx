@@ -3,22 +3,57 @@ import { KsDropdownMenu, KsIconButton } from '@byted-keystone/react';
 import { KsIconAllApplication } from '@fe-infra/keystone-icons-react';
 
 const NAV_OPTIONS = [
-  { value: '/', label: 'Ads Dashboard' },
-  { value: '/campaigns', label: 'Ads Campaign' },
-  { value: '/transactions', label: 'Transactions' },
-  { value: '/payment/p1', label: 'P1 · Manage Payment Portfolios' },
-  { value: '/payment/p2', label: 'P2 · Payment Management' },
-  { value: '/payment/p3', label: 'P3 · Payment Management (Advanced PA)' },
-  { value: '/payment/p4', label: 'P4 · Card Sharing Notice (TTAM)' },
-  { value: '/payment/p5', label: 'P5 · PA Naming Inline Error' },
-  { value: '/payment/p6', label: 'P6 · Promotions — Direction B+C+D (Available & Earning)' },
-  { value: '/payment/p7', label: 'P7 · Promotions — Solution A1 (Not available: 3 states)' },
-  { value: '/payment/p8', label: 'P8 · Promotions — Solution A2 (Not available: +Pending Payout)' },
+  {
+    group: true,
+    groupLabel: 'Ads',
+    value: '__ads',
+    label: 'Ads',
+    children: [
+      { value: '/',           label: 'Dashboard' },
+      { value: '/campaigns',  label: 'Campaigns' },
+    ],
+  },
+  {
+    group: true,
+    groupLabel: 'Transactions',
+    value: '__transactions',
+    label: 'Transactions',
+    children: [
+      { value: '/transactions',     label: 'Transactions Index' },
+      { value: '/transactions/d1',  label: 'D1 · Table View' },
+      { value: '/transactions/d2',  label: 'D2 · Card View' },
+      { value: '/transactions/d3',  label: 'D3 · Detail Drawer' },
+    ],
+  },
+  {
+    group: true,
+    groupLabel: 'Payment',
+    value: '__payment',
+    label: 'Payment',
+    children: [
+      { value: '/payment/p1', label: 'P1 · Manage Portfolios' },
+      { value: '/payment/p2', label: 'P2 · Payment Management' },
+      { value: '/payment/p3', label: 'P3 · Payment Management (Adv. PA)' },
+      { value: '/payment/p4', label: 'P4 · Card Sharing Notice' },
+      { value: '/payment/p5', label: 'P5 · PA Naming Error' },
+    ],
+  },
+  {
+    group: true,
+    groupLabel: 'Promotions',
+    value: '__promotions',
+    label: 'Promotions',
+    children: [
+      { value: '/payment/p6', label: 'S1 · Direction B+C+D' },
+      { value: '/payment/p7', label: 'S2 · Solution A1 (3 States)' },
+      { value: '/payment/p8', label: 'S3 · Solution A2 (Pending Payout)' },
+    ],
+  },
 ];
 
 export default function DevNav() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate  = useNavigate();
+  const location  = useLocation();
 
   return (
     <div className="fixed bottom-5 left-5 z-[100000]">

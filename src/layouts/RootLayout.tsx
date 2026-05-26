@@ -6,12 +6,8 @@ export default function RootLayout() {
   return (
     <div>
       <Outlet />
-      {import.meta.env.DEV && (
-        <>
-          <DevNav />
-          <Agentation />
-        </>
-      )}
+      <DevNav />
+      {import.meta.env.DEV && <Agentation />}
     </div>
   );
 }
