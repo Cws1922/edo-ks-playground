@@ -98,17 +98,21 @@ function NotAvailableDrawer({ credit, open, onClose }: {
   return (
     <KsDrawer
       open={open}
-      title={credit.name}
       size="md"
       onOpenChange={(o: boolean) => { if (!o) onClose(); }}
     >
+      {/* Custom header — title + state tag, matches P7 pattern */}
+      <div slot="header" className="flex items-center gap-2 py-5 px-6 tiktok-headlineSm text-neutral-highOnSurface">
+        <span>{credit.name}</span>
+        <KsTag variant={meta.tagVariant} size="sm">{meta.label}</KsTag>
+      </div>
+
       <div className="flex flex-col gap-6">
 
         {/* Credit overview — module */}
         <div className="bg-neutral-surface rounded-lg p-6">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="tiktok-headlineSm text-neutral-highOnSurface">{credit.amount} {credit.currency}</span>
-            <KsTag variant={meta.tagVariant} size="sm">{meta.label}</KsTag>
+          <div className="tiktok-headlineSm text-neutral-highOnSurface mb-1">
+            {credit.amount} {credit.currency}
           </div>
           <div className="tiktok-labelSm text-neutral-lowOnSurface">
             {credit.state === 'pendingPayout'
@@ -117,33 +121,7 @@ function NotAvailableDrawer({ credit, open, onClose }: {
           </div>
         </div>
 
-        {/* State status + context — module */}
-        <div className="bg-neutral-surface rounded-lg p-6">
-          {credit.state === 'pendingPayout' && (
-            <>
-              <KsStatusMessage variant="success" richTextString="Goal reached — credit being processed" />
-              <div className="mt-3">
-                <div className="tiktok-labelMd text-neutral-lowOnSurface uppercase tracking-wide mb-2" style={{ fontSize: '11px', letterSpacing: '0.06em' }}>What happens next</div>
-                <ul className="pl-4 space-y-1.5">
-                  <li className="tiktok-labelSm text-neutral-onSurface list-disc">Our team is verifying your spend data</li>
-                  <li className="tiktok-labelSm text-neutral-onSurface list-disc">Credit will appear in "Available" once issued</li>
-                  <li className="tiktok-labelSm text-neutral-onSurface list-disc">You'll receive an email notification when credits are issued</li>
-                </ul>
-              </div>
-            </>
-          )}
-          {credit.state === 'used' && (
-            <KsStatusMessage variant="neutral" richTextString="Credit fully used — deducted from billing" />
-          )}
-          {credit.state === 'expired' && (
-            <KsStatusMessage variant="warning" richTextString="Credit expired — unused balance forfeited" />
-          )}
-          {credit.state === 'suspended' && (
-            <KsStatusMessage variant="error" richTextString={`Suspended: ${credit.suspendReason}`} />
-          )}
-        </div>
-
-        {/* Details — module */}
+        {/* Details — module (status messages at bottom, below KV rows) */}
         <div className="bg-neutral-surface rounded-lg p-6">
           <div className="tiktok-labelMd text-neutral-lowOnSurface uppercase tracking-wide mb-2" style={{ fontSize: '11px', letterSpacing: '0.06em' }}>
             Details
@@ -174,6 +152,36 @@ function NotAvailableDrawer({ credit, open, onClose }: {
               <KVRow label="Suspended on" value={credit.stateDate} />
               <KVRow label="Reason"       value={credit.suspendReason ?? '—'} />
             </>
+          )}
+
+          {/* Supplementary status info — below KV rows */}
+          {credit.state === 'pendingPayout' && (
+            <div className="mt-4">
+              <KsStatusMessage variant="success" richTextString="Goal reached — credit being processed" />
+              <div className="mt-3">
+                <div className="tiktok-labelMd text-neutral-lowOnSurface uppercase tracking-wide mb-2" style={{ fontSize: '11px', letterSpacing: '0.06em' }}>What happens next</div>
+                <ul className="pl-4 space-y-1.5">
+                  <li className="tiktok-labelSm text-neutral-onSurface list-disc">Our team is verifying your spend data</li>
+                  <li className="tiktok-labelSm text-neutral-onSurface list-disc">Credit will appear in "Available" once issued</li>
+                  <li className="tiktok-labelSm text-neutral-onSurface list-disc">You'll receive an email notification when credits are issued</li>
+                </ul>
+              </div>
+            </div>
+          )}
+          {credit.state === 'used' && (
+            <div className="mt-4">
+              <KsStatusMessage variant="neutral" richTextString="Credit fully used — deducted from billing" />
+            </div>
+          )}
+          {credit.state === 'expired' && (
+            <div className="mt-4">
+              <KsStatusMessage variant="warning" richTextString="Credit expired — unused balance forfeited" />
+            </div>
+          )}
+          {credit.state === 'suspended' && (
+            <div className="mt-4">
+              <KsStatusMessage variant="error" richTextString={`Suspended: ${credit.suspendReason}`} />
+            </div>
           )}
         </div>
 
