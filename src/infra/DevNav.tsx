@@ -57,7 +57,12 @@ export default function DevNav() {
 
   return (
     <div className="fixed bottom-5 left-5 z-[100000]">
+      {/* popup width via CSS custom property on the host element */}
+      <style>{`
+        .dev-nav-dropdown::part(popup) { min-width: 300px; width: 300px; }
+      `}</style>
       <KsDropdownMenu
+        class="dev-nav-dropdown"
         selectable
         defaultOpen={false}
         placement="top-start"
