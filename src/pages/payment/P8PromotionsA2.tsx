@@ -177,21 +177,14 @@ function NotAvailableDrawer({ credit, open, onClose }: {
           )}
         </div>
 
-        {/* Footer CTAs — module (conditional) */}
-        {(credit.state === 'expired' || credit.state === 'suspended') && (
-          <div className="bg-neutral-surface rounded-lg p-6 flex gap-2">
-            <KsButton variant="default" size="md">Contact support</KsButton>
-            <KsButton variant="default" size="md" onClick={onClose}>Close</KsButton>
-          </div>
-        )}
-        {credit.state === 'pendingPayout' && (
-          <div className="bg-neutral-surface rounded-lg p-6">
-            <button className="tiktok-labelSm text-primary-fill hover:underline">
-              Questions about your payout? Contact support →
-            </button>
-          </div>
-        )}
       </div>
+
+      {/* Footer — pinned, right-aligned, no Close button */}
+      {(credit.state === 'expired' || credit.state === 'suspended' || credit.state === 'pendingPayout') && (
+        <div slot="footer" className="flex justify-end w-full">
+          <KsButton variant="primary" size="md">Contact support</KsButton>
+        </div>
+      )}
     </KsDrawer>
   );
 }
@@ -248,22 +241,22 @@ export default function P8PromotionsA2() {
           <KsText variant="headlineLg" color="neutralHigh">Promotions</KsText>
         </div>
 
-        {/* Summary card — Total + Free / Conditional / Assignable */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl mb-4 flex items-stretch">
-          <div className="px-6 py-5 flex flex-col justify-center gap-1 shrink-0">
+        {/* Summary card — matches P6/P7 layout */}
+        <div className="bg-neutral-surface rounded-xl mb-4 flex items-stretch px-6">
+          <div className="py-5 flex flex-col justify-center gap-1">
             <span className="tiktok-labelMd text-neutral-onSurface">Total available ad credit</span>
             <div className="flex items-baseline gap-1.5 mt-1">
               <span className="tiktok-headlineLg text-neutral-highOnSurface">3,155.00</span>
               <span className="tiktok-bodyMd text-neutral-onSurface">USD</span>
             </div>
           </div>
-          <div className="border-l border-neutral-fillLow my-4" />
+          <div className="w-px bg-neutral-fillLow my-6 shrink-0 mx-[48px]" />
           {[
             { label: 'Free credits',        value: '700.00'   },
             { label: 'Conditional credits', value: '705.00'   },
             { label: 'Assignable credits',  value: '1,750.00' },
-          ].map(t => (
-            <div key={t.label} className="flex-1 px-6 py-5 flex flex-col justify-center gap-1">
+          ].map((t, i) => (
+            <div key={t.label} className={`py-5 flex flex-col justify-center gap-1${i > 0 ? ' ml-[72px]' : ''}`}>
               <div className="flex items-center gap-1">
                 <span className="tiktok-labelMd text-neutral-onSurface">{t.label}</span>
                 <KsIconHelp size={13} className="text-neutral-lowOnSurface flex-shrink-0" />
@@ -277,7 +270,7 @@ export default function P8PromotionsA2() {
         </div>
 
         {/* Main card */}
-        <div className="bg-neutral-surface border border-neutral-fillLow rounded-xl overflow-hidden">
+        <div className="bg-neutral-surface rounded-xl overflow-hidden">
           {/* Tab bar (KsTabs lite md) */}
           <div className="px-5 pt-3 border-b border-neutral-fillLow">
             <KsTabs
@@ -309,70 +302,65 @@ export default function P8PromotionsA2() {
 
           {/* ── Not available tab (Solution A2) ── */}
           {activeTab === 'notAvailable' && (
-            <div className="p-5 flex flex-col gap-6">
-              <KsInlineAlert
-                variant="info"
-                content={
-                  demoState === 'withPending'
-                    ? 'Solution A2: Adds a 4th state "Pending payout" for credits where the spend goal is reached but issuance is in progress — requires new backend state.'
-                    : 'A1 baseline view: same 3 states (Used / Expired / Suspended). Toggle above to see the A2 difference.'
-                }
-              />
+            <div className="flex flex-col">
+              <div className="px-5 py-4">
+                <KsInlineAlert
+                  variant="info"
+                  content={
+                    demoState === 'withPending'
+                      ? 'Solution A2: Adds a 4th state "Pending payout" for credits where the spend goal is reached but issuance is in progress — requires new backend state.'
+                      : 'A1 baseline view: same 3 states (Used / Expired / Suspended). Toggle above to see the A2 difference.'
+                  }
+                />
+              </div>
 
-              {/* ── Pending Payout section (A2 only) ── */}
-              {pendingCredits.length > 0 && (
-                <div className="rounded-xl border-2 border-success-fill bg-success-fillLow overflow-hidden">
-                  <div className="px-4 py-3 bg-success-fill flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <KsIconFilledCheck size={16} className="text-success-onFill" />
-                      <span className="tiktok-titleSm text-success-onFill">
-                        Pending payout ({pendingCredits.length})
-                      </span>
-                    </div>
-                    <span className="tiktok-labelSm text-success-onFill opacity-80">
-                      Goal reached — credits being processed
-                    </span>
-                  </div>
-                  <table className="w-full text-sm table-fixed" style={{ borderCollapse: 'collapse' }}>
-                    <thead>
-                      <tr className="bg-success-surface2">
-                        {([
-                          { label: 'Credit name',   w: '28%' },
-                          { label: 'Status',        w: '14%' },
-                          { label: 'Credit reward', w: '14%' },
-                          { label: 'Goal reached',  w: '18%' },
-                          { label: 'Expected by',   w: '16%' },
-                          { label: 'Operation',     w: '10%' },
-                        ] as { label: string; w: string }[]).map(col => (
-                          <th key={col.label} style={{ width: col.w }}
-                            className="text-left px-4 py-3 tiktok-labelLg text-neutral-highOnSurface font-medium border-b border-neutral-fillLow">
-                            {col.label}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {pendingCredits.map((credit, idx) => (
+              {/* Single unified table — pending payout rows first, edge-to-edge */}
+              <div className="py-4">
+                <table className="w-full text-sm table-fixed" style={{ borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr className="bg-neutral-surface2">
+                      {([
+                        { label: 'Ad credit name', w: '28%' },
+                        { label: 'Status',         w: '13%' },
+                        { label: 'Amount',         w: '13%' },
+                        { label: 'Date',           w: '36%' },
+                        { label: 'Actions',        w: '10%' },
+                      ] as { label: string; w: string }[]).map(col => (
+                        <th key={col.label} style={{ width: col.w }}
+                          className="text-left px-4 py-3 tiktok-labelLg text-neutral-highOnSurface font-medium border-b border-neutral-fillLow">
+                          {col.label}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...pendingCredits, ...otherCredits].map((credit, idx, arr) => {
+                      const meta = STATE_META[credit.state];
+                      return (
                         <tr
                           key={credit.id}
-                          className={`hover:bg-success-surface3 transition-colors ${idx < pendingCredits.length - 1 ? 'border-b border-neutral-fillLow' : ''}`}
+                          className={`hover:bg-neutral-surface2 transition-colors ${idx < arr.length - 1 ? 'border-b border-neutral-fillLow' : ''}`}
                         >
                           <td className="px-4 py-3.5 align-top">
                             <div className="tiktok-bodySm text-neutral-highOnSurface">{credit.name}</div>
                             <div className="tiktok-labelSm text-neutral-lowOnSurface mt-0.5">{credit.id}</div>
                           </td>
                           <td className="px-4 py-3.5 align-top">
-                            <KsTag variant="success" size="sm">Pending payout</KsTag>
+                            <KsTag variant={meta.tagVariant} size="sm">{meta.label}</KsTag>
                           </td>
                           <td className="px-4 py-3.5 align-top">
-                            <div className="tiktok-bodySm text-success-onSurface">{credit.amount}</div>
+                            <div className="tiktok-bodySm text-neutral-highOnSurface">{credit.amount}</div>
                             <div className="tiktok-labelSm text-neutral-lowOnSurface">{credit.currency}</div>
                           </td>
                           <td className="px-4 py-3.5 align-top">
-                            <span className="tiktok-bodySm text-neutral-onSurface">{credit.stateDate}</span>
-                          </td>
-                          <td className="px-4 py-3.5 align-top">
-                            <span className="tiktok-bodySm text-neutral-highOnSurface">{credit.expectedPayoutDate}</span>
+                            {credit.state === 'pendingPayout' ? (
+                              <>
+                                <div className="tiktok-bodySm text-neutral-onSurface">Goal reached: {credit.stateDate}</div>
+                                <div className="tiktok-labelSm text-neutral-lowOnSurface mt-0.5">Expected by: {credit.expectedPayoutDate}</div>
+                              </>
+                            ) : (
+                              <div className="tiktok-bodySm text-neutral-onSurface">{meta.dateLabel} {credit.stateDate}</div>
+                            )}
                           </td>
                           <td className="px-4 py-3.5 align-top">
                             <button
@@ -383,78 +371,11 @@ export default function P8PromotionsA2() {
                             </button>
                           </td>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-
-              {/* ── Other states ── */}
-              {otherCredits.length > 0 && (
-                <div>
-                  {pendingCredits.length > 0 && (
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="flex-1 h-px bg-neutral-fillLow" />
-                      <span className="tiktok-labelSm text-neutral-lowOnSurface px-2">Other ({otherCredits.length})</span>
-                      <div className="flex-1 h-px bg-neutral-fillLow" />
-                    </div>
-                  )}
-                  <div className="rounded-xl border border-neutral-fillLow overflow-hidden">
-                    <table className="w-full text-sm table-fixed" style={{ borderCollapse: 'collapse' }}>
-                      <thead>
-                        <tr className="bg-neutral-surface2">
-                          {([
-                            { label: 'Ad credit name', w: '30%' },
-                            { label: 'Status',         w: '12%' },
-                            { label: 'Amount',         w: '16%' },
-                            { label: 'Date',           w: '30%' },
-                            { label: 'Operation',      w: '12%' },
-                          ] as { label: string; w: string }[]).map(col => (
-                            <th key={col.label} style={{ width: col.w }}
-                              className="text-left px-4 py-3 tiktok-labelLg text-neutral-highOnSurface font-medium border-b border-neutral-fillLow">
-                              {col.label}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {otherCredits.map((credit, idx) => {
-                          const meta = STATE_META[credit.state];
-                          return (
-                            <tr
-                              key={credit.id}
-                              className={`hover:bg-neutral-surface2 transition-colors ${idx < otherCredits.length - 1 ? 'border-b border-neutral-fillLow' : ''}`}
-                            >
-                              <td className="px-4 py-3.5 align-top">
-                                <div className="tiktok-bodySm text-neutral-highOnSurface">{credit.name}</div>
-                                <div className="tiktok-labelSm text-neutral-lowOnSurface mt-0.5">{credit.id}</div>
-                              </td>
-                              <td className="px-4 py-3.5 align-top">
-                                <KsTag variant={meta.tagVariant} size="sm">{meta.label}</KsTag>
-                              </td>
-                              <td className="px-4 py-3.5 align-top">
-                                <div className="tiktok-bodySm text-neutral-highOnSurface">{credit.amount}</div>
-                                <div className="tiktok-labelSm text-neutral-lowOnSurface">{credit.currency}</div>
-                              </td>
-                              <td className="px-4 py-3.5 align-top">
-                                <span className="tiktok-bodySm text-neutral-onSurface">{meta.dateLabel} {credit.stateDate}</span>
-                              </td>
-                              <td className="px-4 py-3.5 align-top">
-                                <button
-                                  onClick={() => openCredit(credit)}
-                                  className="tiktok-labelSm text-primary-fill hover:underline whitespace-nowrap"
-                                >
-                                  View details
-                                </button>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
