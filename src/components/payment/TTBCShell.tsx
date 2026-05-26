@@ -1,89 +1,27 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import clsx from 'clsx';
-import { KsText } from '@byted-keystone/react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { KsText, KsSideNavigation, KsNavItem, KsSubNavigation } from '@byted-keystone/react';
 import {
   KsIconHome,
   KsIconPeople,
   KsIconChevronDown,
-  KsIconChevronRight,
   KsIconApplications,
   KsIconChart,
   KsIconLog,
   KsIconGear,
   KsIconBell,
   KsIconHelp,
-  KsIconChevronUp,
 } from '@fe-infra/keystone-icons-react';
 import tiktokLogo from '@/assets/tiktok-logo.svg';
 
-interface NavGroupItem {
+interface NavItem {
   label: string;
-  href?: string;
-  active?: boolean;
+  href: string;
 }
 interface NavGroup {
   icon: React.ReactNode;
   label: string;
-  items?: NavGroupItem[];
+  items?: NavItem[];
   href?: string;
-}
-
-function SidebarGroup({
-  group,
-  activeHref,
-}: {
-  group: NavGroup;
-  activeHref: string;
-}) {
-  const hasChildren = group.items && group.items.length > 0;
-  const isParentActive = group.items?.some((i) => i.href && activeHref.startsWith(i.href));
-  const [open, setOpen] = useState(isParentActive ?? false);
-
-  return (
-    <div>
-      <button
-        onClick={() => hasChildren && setOpen((o) => !o)}
-        className={clsx(
-          'w-full flex items-center gap-2 px-3 py-2 text-left transition-colors rounded-none',
-          isParentActive
-            ? 'text-primary-fill bg-primary-fillLow font-medium'
-            : 'text-neutral-highOnSurface hover:bg-neutral-fillLow',
-        )}
-      >
-        <span className={clsx('flex-shrink-0', isParentActive ? 'text-primary-fill' : 'text-neutral-lowOnSurface')}>
-          {group.icon}
-        </span>
-        <span className="tiktok-labelLg flex-1">{group.label}</span>
-        {hasChildren && (
-          <span className="text-neutral-lowOnSurface">
-            {open ? <KsIconChevronUp size={14} /> : <KsIconChevronDown size={14} />}
-          </span>
-        )}
-      </button>
-      {hasChildren && open && (
-        <div className="pl-8 pr-2">
-          {group.items!.map((item) => {
-            const isActive = item.href ? activeHref.startsWith(item.href) : false;
-            return (
-              <Link
-                key={item.label}
-                to={item.href ?? '#'}
-                className={clsx(
-                  'block px-3 py-1.5 tiktok-bodySm rounded-md transition-colors',
-                  isActive
-                    ? 'text-primary-fill bg-primary-fillLow font-medium'
-                    : 'text-neutral-onSurface hover:bg-neutral-fillLow',
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
 }
 
 const NAV_GROUPS: NavGroup[] = [
@@ -114,11 +52,7 @@ const NAV_GROUPS: NavGroup[] = [
       { label: 'Invoices', href: '#' },
     ],
   },
-  {
-    icon: <KsIconLog size={16} />,
-    label: 'Activity Log',
-    items: [],
-  },
+  { icon: <KsIconLog size={16} />, label: 'Activity Log', href: '#' },
   {
     icon: <KsIconGear size={16} />,
     label: 'Business Settings',
@@ -131,6 +65,7 @@ const NAV_GROUPS: NavGroup[] = [
 
 export function TTBCShell({ children, showSidebar = false }: { children: React.ReactNode; showSidebar?: boolean }) {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-neutral-surface2 flex flex-col">
@@ -160,10 +95,42 @@ export function TTBCShell({ children, showSidebar = false }: { children: React.R
 
       {showSidebar ? (
         <div className="flex flex-1 overflow-hidden">
-          <aside className="w-40 bg-neutral-surface border-r border-neutral-fillLow overflow-y-auto flex-shrink-0 py-2">
-            {NAV_GROUPS.map((group) => (
-              <SidebarGroup key={group.label} group={group} activeHref={location.pathname} />
-            ))}
+          <aside className="w-40 bg-neutral-surface border-r border-neutral-fillLow overflow-y-auto flex-shrink-0">
+            <KsSideNavigation>
+              {NAV_GROUPS.map((group) =>
+                group.items?.length ? (
+                  <KsSubNavigation
+                    key={group.label}
+                    size="sm"
+                    defaultExpand={group.items.some(i => location.pathname.startsWith(i.href))}
+                  >
+                    <span slot="prefix">{group.icon}</span>
+                    <span slot="title">{group.label}</span>
+                    {group.items.map((item) => (
+                      <KsNavItem
+                        key={item.label}
+                        size="sm"
+                        level={1}
+                        active={location.pathname.startsWith(item.href) && item.href !== '#'}
+                        onClick={() => navigate(item.href)}
+                      >
+                        {item.label}
+                      </KsNavItem>
+                    ))}
+                  </KsSubNavigation>
+                ) : (
+                  <KsNavItem
+                    key={group.label}
+                    size="sm"
+                    active={group.href ? location.pathname === group.href : false}
+                    onClick={() => group.href && navigate(group.href)}
+                  >
+                    <span slot="prefix">{group.icon}</span>
+                    {group.label}
+                  </KsNavItem>
+                )
+              )}
+            </KsSideNavigation>
           </aside>
           <main className="flex-1 overflow-auto">{children}</main>
         </div>

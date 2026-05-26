@@ -16,27 +16,20 @@ const TRANSFERABLE_NORMAL = 1000;
 const TRANSFERABLE_STATE_B = 5;
 const MIN_AMOUNT = 10;
 
-function RadioCard({ icon, label, description, selected, onClick }: {
-  icon: string; label: string; description: string; selected: boolean; onClick: () => void;
+function Tile({ label, description, selected, onClick }: {
+  label: string; description: string; selected: boolean; onClick: () => void;
 }) {
   return (
     <button
       onClick={onClick}
-      className={`flex-1 text-left p-3 rounded-lg border-2 transition-colors ${
-        selected ? 'border-primary-fill bg-primary-fillLow' : 'border-neutral-fillLow bg-neutral-surface hover:bg-neutral-surface2'
+      className={`flex-1 text-left p-4 rounded-lg border transition-colors ${
+        selected
+          ? 'border-primary-fill bg-primary-fillLow'
+          : 'border-neutral-fillLow bg-neutral-surface hover:bg-neutral-surface2'
       }`}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="tiktok-labelLg text-neutral-highOnSurface mb-0.5">{icon} {label}</p>
-          <p className="tiktok-bodySm text-neutral-onSurface">{description}</p>
-        </div>
-        <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${
-          selected ? 'border-primary-fill' : 'border-neutral-fill'
-        }`}>
-          {selected && <div className="w-2 h-2 rounded-full bg-primary-fill" />}
-        </div>
-      </div>
+      <p className={`tiktok-labelLg mb-0.5 ${selected ? 'text-primary-fill' : 'text-neutral-highOnSurface'}`}>{label}</p>
+      <p className="tiktok-bodySm text-neutral-onSurface">{description}</p>
     </button>
   );
 }
@@ -61,15 +54,13 @@ export function AdjustCashBalanceModal({ open, onClose, demoState, adAccountName
     >
       {/* Direction toggle */}
       <div className="flex gap-3 mb-4">
-        <RadioCard
-          icon="+"
+        <Tile
           label="Add balance"
           description="Add cash to ad account"
           selected={direction === 'add'}
           onClick={() => setDirection('add')}
         />
-        <RadioCard
-          icon="—"
+        <Tile
           label="Decrease balance"
           description="Transfer cash back to payment portfolio for reallocation"
           selected={direction === 'decrease'}

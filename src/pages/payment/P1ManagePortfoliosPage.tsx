@@ -133,11 +133,7 @@ export default function P1ManagePortfoliosPage() {
           <div className="px-6 pt-5 pb-4">
             <KsText variant="titleLg" color="neutralHigh">Payment Portfolios</KsText>
             <p className="tiktok-labelSm text-neutral-onSurface mt-1">
-              Payment Portfolios you have access to are listed.
-              {/* P1: append inline text */}
-              {variant === 'p1' && (
-                <span className="ml-1">{NOTICE_TEXT}</span>
-              )}
+              Only Payment Portfolios you have access to are listed here, not all portfolios and balances under your company.
             </p>
           </div>
 
