@@ -1,92 +1,103 @@
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { KsDropdownMenu, KsIconButton } from '@byted-keystone/react';
 import { KsIconAllApplication } from '@fe-infra/keystone-icons-react';
 
-const NAV_OPTIONS = [
+const NAV_GROUPS = [
   {
-    group: true,
-    groupLabel: 'Ads',
-    value: '__ads',
     label: 'Ads',
-    children: [
-      { value: '/',           label: 'Dashboard' },
-      { value: '/campaigns',  label: 'Campaigns' },
+    items: [
+      { path: '/',           label: 'Dashboard' },
+      { path: '/campaigns',  label: 'Campaigns' },
     ],
   },
   {
-    group: true,
-    groupLabel: 'Transactions',
-    value: '__transactions',
     label: 'Transactions',
-    children: [
-      { value: '/transactions',     label: 'Transactions Index' },
-      { value: '/transactions/d1',  label: 'D1 · Table View' },
-      { value: '/transactions/d2',  label: 'D2 · Card View' },
-      { value: '/transactions/d3',  label: 'D3 · Detail Drawer' },
+    items: [
+      { path: '/transactions',     label: 'Transactions Index' },
+      { path: '/transactions/d1',  label: 'D1 · Table View' },
+      { path: '/transactions/d2',  label: 'D2 · Card View' },
+      { path: '/transactions/d3',  label: 'D3 · Detail Drawer' },
     ],
   },
   {
-    group: true,
-    groupLabel: 'Payment',
-    value: '__payment',
     label: 'Payment',
-    children: [
-      { value: '/payment/p1', label: 'P1 · Manage Portfolios' },
-      { value: '/payment/p2', label: 'P2 · Payment Management' },
-      { value: '/payment/p3', label: 'P3 · Payment Management (Adv. PA)' },
-      { value: '/payment/p4', label: 'P4 · Card Sharing Notice' },
-      { value: '/payment/p5', label: 'P5 · PA Naming Error' },
+    items: [
+      { path: '/payment/p1', label: 'P1 · Manage Portfolios' },
+      { path: '/payment/p2', label: 'P2 · Payment Management' },
+      { path: '/payment/p3', label: 'P3 · Payment Management (Adv. PA)' },
+      { path: '/payment/p4', label: 'P4 · Card Sharing Notice' },
+      { path: '/payment/p5', label: 'P5 · PA Naming Error' },
     ],
   },
   {
-    group: true,
-    groupLabel: 'Promotions',
-    value: '__promotions',
     label: 'Promotions',
-    children: [
-      { value: '/payment/p6', label: 'S1 · Direction B+C+D' },
-      { value: '/payment/p7', label: 'S2 · Solution A1 (3 States)' },
-      { value: '/payment/p8', label: 'S3 · Solution A2 (Pending Payout)' },
+    items: [
+      { path: '/payment/p6', label: 'S1 · Direction B+C+D' },
+      { path: '/payment/p7', label: 'S2 · Solution A1 (3 States)' },
+      { path: '/payment/p8', label: 'S3 · Solution A2 (Pending Payout)' },
     ],
   },
 ];
 
 export default function DevNav() {
-  const navigate  = useNavigate();
-  const location  = useLocation();
+  const navigate      = useNavigate();
+  const location      = useLocation();
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="fixed bottom-5 left-5 z-[100000]">
-      {/* popup width via CSS custom property on the host element */}
-      <style>{`
-        .dev-nav-dropdown::part(popup) { min-width: 300px; width: 300px; }
-      `}</style>
-      <KsDropdownMenu
-        class="dev-nav-dropdown"
-        selectable
-        defaultOpen={false}
-        placement="top-start"
-        options={NAV_OPTIONS}
-        value={[location.pathname]}
-        onChange={(values: (string | number)[]) => {
-          const path = values[0];
-          if (path) navigate(String(path));
-        }}
+      {/* Popup panel — opens upward */}
+      {open && (
+        <>
+          {/* Click-away backdrop */}
+          <div className="fixed inset-0 z-[-1]" onClick={() => setOpen(false)} />
+
+          <div
+            className="absolute bottom-14 left-0 w-[300px] bg-neutral-surface rounded-xl overflow-hidden"
+            style={{ boxShadow: '0 8px 24px 0 rgba(0,0,0,0.12), 0 2px 8px 0 rgba(0,0,0,0.08)' }}
+          >
+            {NAV_GROUPS.map((group, gi) => (
+              <div key={group.label}>
+                {gi > 0 && <div className="h-px bg-neutral-fillLow mx-3" />}
+                <div className="px-3 pt-3 pb-1">
+                  <span className="tiktok-labelSm text-neutral-lowOnSurface uppercase tracking-wide" style={{ fontSize: '11px' }}>
+                    {group.label}
+                  </span>
+                </div>
+                {group.items.map(item => {
+                  const active = location.pathname === item.path;
+                  return (
+                    <button
+                      key={item.path}
+                      onClick={() => { navigate(item.path); setOpen(false); }}
+                      className={`w-full text-left px-3 py-2 tiktok-bodySm rounded-lg mx-0 flex items-center justify-between transition-colors ${
+                        active
+                          ? 'bg-primary-surface1 text-primary-fill font-medium'
+                          : 'text-neutral-highOnSurface hover:bg-neutral-surface2'
+                      }`}
+                    >
+                      {item.label}
+                      {active && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary-fill shrink-0 ml-2" />
+                      )}
+                    </button>
+                  );
+                })}
+                <div className="pb-1" />
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Trigger button */}
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-10 h-10 rounded-full bg-neutral-highOnSurface text-neutral-surface flex items-center justify-center transition-opacity hover:opacity-80"
+        style={{ boxShadow: '0 2px 8px 0 rgba(0,0,0,0.18)' }}
       >
-        <KsIconButton
-          variant="filled"
-          size="lg"
-          style={
-            {
-              '--ks-comp-button-border-radius': '9999px',
-              borderRadius: '100%',
-              boxShadow: 'var(--ks-elevation-shadow-level1, 0 2px 8px 0 rgba(0, 0, 0, 0.12))',
-            } as React.CSSProperties
-          }
-        >
-          <KsIconAllApplication />
-        </KsIconButton>
-      </KsDropdownMenu>
+        <KsIconAllApplication size={20} />
+      </button>
     </div>
   );
 }
