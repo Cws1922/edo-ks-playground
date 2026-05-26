@@ -86,19 +86,21 @@ function NotAvailableDrawer({ credit, open, onClose }: {
   return (
     <KsDrawer
       open={open}
-      title={credit.name}
       size="md"
       onOpenChange={(o: boolean) => { if (!o) onClose(); }}
     >
+      {/* Custom header — matches native drawer__header styles, adds state KsTag next to title */}
+      <div slot="header" className="flex items-center gap-2 py-5 px-6 tiktok-headlineSm text-neutral-highOnSurface">
+        <span>{credit.name}</span>
+        <KsTag variant={meta.tagVariant} size="sm">{meta.label}</KsTag>
+      </div>
+
       {/* Scrollable content modules */}
       <div className="flex flex-col gap-6">
 
         {/* Credit overview — module */}
         <div className="bg-neutral-surface rounded-lg p-6">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="tiktok-headlineSm text-neutral-highOnSurface">{credit.amount} {credit.currency}</span>
-            <KsTag variant={meta.tagVariant} size="sm">{meta.label}</KsTag>
-          </div>
+          <div className="tiktok-headlineSm text-neutral-highOnSurface mb-1">{credit.amount} {credit.currency}</div>
           <div className="tiktok-labelSm text-neutral-lowOnSurface">{meta.dateLabel} {credit.stateDate}</div>
         </div>
 
@@ -147,11 +149,10 @@ function NotAvailableDrawer({ credit, open, onClose }: {
         </div>
       </div>
 
-      {/* Footer — drawer footer slot (same level as header), right-aligned, Close = primary */}
+      {/* Footer — pinned at drawer-header level, right-aligned, no Close button */}
       {(credit.state === 'expired' || credit.state === 'suspended') && (
-        <div slot="footer" className="flex justify-end gap-2 w-full">
-          <KsButton variant="default" size="md">Contact support</KsButton>
-          <KsButton variant="primary" size="md" onClick={onClose}>Close</KsButton>
+        <div slot="footer" className="flex justify-end w-full">
+          <KsButton variant="primary" size="md">Contact support</KsButton>
         </div>
       )}
     </KsDrawer>

@@ -4,7 +4,7 @@ import {
   KsTabs, KsTabItem, KsStatusMessage,
 } from '@byted-keystone/react';
 import {
-  KsIconCoupon, KsIconFilledWarning, KsIconFilledCheck,
+  KsIconCoupon, KsIconFilledCheck,
   KsIconClock, KsIconHelp,
 } from '@fe-infra/keystone-icons-react';
 import { TTBCShell } from '@/components/payment/TTBCShell';
@@ -155,37 +155,21 @@ function CreditDrawer({ credit, open, onClose }: {
   return (
     <KsDrawer
       open={open}
-      title={credit.name}
       size="md"
       onOpenChange={(o: boolean) => { if (!o) onClose(); }}
     >
+      {/* Custom header — matches native drawer__header styles, adds TypeBadge next to title */}
+      <div slot="header" className="flex items-center gap-2 py-5 px-6 tiktok-headlineSm text-neutral-highOnSurface">
+        <span>{credit.name}</span>
+        <TypeBadge type={credit.type} />
+      </div>
+
       <div className="flex flex-col gap-6">
 
-        {/* Alert banner — module (conditional) */}
-        {isUnassigned && (
-          <div className="bg-neutral-surface rounded-lg p-6">
-            <KsInlineAlert
-              variant="warning"
-              title="Action required — credit not activated"
-              content="This credit will not spend until you assign it to campaigns."
-            />
-          </div>
-        )}
-        {unmetCount > 0 && (
-          <div className="bg-neutral-surface rounded-lg p-6">
-            <KsInlineAlert
-              variant="info"
-              title={`${unmetCount} condition${unmetCount > 1 ? 's' : ''} not met`}
-              content="This credit will only apply once all conditions are satisfied."
-            />
-          </div>
-        )}
-
-        {/* Credit overview — module */}
+        {/* Credit overview — module (alerts merged here, no standalone banner module) */}
         <div className="bg-neutral-surface rounded-lg p-6">
           <div className="flex items-center gap-2 mb-1">
             <span className="tiktok-headlineSm text-neutral-highOnSurface">{fmt(available)} {credit.currency}</span>
-            <TypeBadge type={credit.type} />
           </div>
           <div className="flex items-center gap-1.5">
             <KsIconClock size={13} className={credit.daysLeft <= 30 ? 'text-warning-onSurface' : 'text-neutral-lowOnSurface'} />
@@ -193,6 +177,24 @@ function CreditDrawer({ credit, open, onClose }: {
               Valid until {credit.endDate} · {credit.daysLeft} days left
             </span>
           </div>
+          {isUnassigned && (
+            <div className="mt-4">
+              <KsInlineAlert
+                variant="warning"
+                title="Action required — credit not activated"
+                content="This credit will not spend until you assign it to campaigns."
+              />
+            </div>
+          )}
+          {unmetCount > 0 && (
+            <div className="mt-4">
+              <KsInlineAlert
+                variant="info"
+                title={`${unmetCount} condition${unmetCount > 1 ? 's' : ''} not met`}
+                content="This credit will only apply once all conditions are satisfied."
+              />
+            </div>
+          )}
         </div>
 
         {/* Details — module */}
@@ -228,18 +230,12 @@ function CreditDrawer({ credit, open, onClose }: {
 
           {isUnassigned && (
             <>
-              <KsStatusMessage
-                variant="warning"
-                richTextString="Not assigned — credit inactive"
-              />
-              <div className="mt-3 rounded-lg bg-warning-fillLow p-3">
-                <div className="tiktok-labelSm text-neutral-highOnSurface font-medium mb-1.5">Steps to activate:</div>
-                <ol className="pl-4 space-y-1">
-                  <li className="tiktok-labelSm text-neutral-onSurface list-decimal">Click "Assign to campaigns" below</li>
-                  <li className="tiktok-labelSm text-neutral-onSurface list-decimal">Select one or more campaigns</li>
-                  <li className="tiktok-labelSm text-neutral-onSurface list-decimal">Credit applies to billing for those campaigns</li>
-                </ol>
-              </div>
+              <div className="tiktok-labelSm text-neutral-highOnSurface font-medium mb-1.5">Steps to activate:</div>
+              <ol className="pl-4 space-y-1">
+                <li className="tiktok-labelSm text-neutral-onSurface list-decimal">Click "Assign to campaigns" below</li>
+                <li className="tiktok-labelSm text-neutral-onSurface list-decimal">Select one or more campaigns</li>
+                <li className="tiktok-labelSm text-neutral-onSurface list-decimal">Credit applies to billing for those campaigns</li>
+              </ol>
             </>
           )}
 
@@ -259,21 +255,14 @@ function CreditDrawer({ credit, open, onClose }: {
 
           {credit.type === 'conditional' && credit.conditions && (
             <>
-              <KsStatusMessage
-                variant={unmetCount > 0 ? 'warning' : 'success'}
-                richTextString={unmetCount > 0 ? `${unmetCount} condition${unmetCount > 1 ? 's' : ''} not met` : 'All conditions met'}
-              />
-              <div className="mt-3 flex flex-col gap-2">
+              <div className="flex flex-col gap-2">
                 {credit.conditions.map((c, i) => (
                   <div key={i} className="flex items-center gap-2">
                     {c.met
-                      ? <KsIconFilledCheck   size={14} className="text-success-onSurface flex-shrink-0" />
-                      : <KsIconFilledWarning size={14} className="text-warning-onSurface flex-shrink-0" />
+                      ? <KsIconFilledCheck size={14} className="text-success-onSurface flex-shrink-0" />
+                      : <span className="inline-flex items-center justify-center shrink-0 rounded-full bg-warning-fill text-warning-onFill" style={{ width: 14, height: 14, fontSize: 9, fontWeight: 700, lineHeight: 1 }}>!</span>
                     }
                     <span className="tiktok-bodySm flex-1 text-neutral-highOnSurface">{c.label}</span>
-                    <span className={`tiktok-labelSm font-medium ${c.met ? 'text-success-onSurface' : 'text-warning-onSurface'}`}>
-                      {c.met ? 'Met' : 'Not met'}
-                    </span>
                   </div>
                 ))}
               </div>
@@ -284,15 +273,15 @@ function CreditDrawer({ credit, open, onClose }: {
           )}
         </div>
 
-        {/* Footer actions — module (conditional) */}
-        {(isUnassigned || isAssigned) && (
-          <div className="bg-neutral-surface rounded-lg p-6 flex gap-2">
-            {isUnassigned && <KsButton variant="primary" size="md">Assign to campaigns</KsButton>}
-            {isAssigned   && <KsButton variant="default" size="md">Manage assignments</KsButton>}
-            <KsButton variant="default" size="md" onClick={onClose}>Close</KsButton>
-          </div>
-        )}
       </div>
+
+      {/* Footer — pinned at drawer-header level, right-aligned, no Close button */}
+      {(isUnassigned || isAssigned) && (
+        <div slot="footer" className="flex justify-end w-full">
+          {isUnassigned && <KsButton variant="primary" size="md">Assign to campaigns</KsButton>}
+          {isAssigned   && <KsButton variant="primary" size="md">Manage assignments</KsButton>}
+        </div>
+      )}
     </KsDrawer>
   );
 }
@@ -587,7 +576,7 @@ export default function P6PromotionsPageBCD() {
                           </div>
                         </td>
                         <td className="px-4 py-3.5 align-top">
-                          <button className="tiktok-labelSm text-primary-fill hover:underline">View →</button>
+                          <button className="tiktok-labelSm text-primary-fill hover:underline">View details</button>
                         </td>
                       </tr>
                     );
