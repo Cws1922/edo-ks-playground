@@ -164,7 +164,7 @@ export default function P3PaymentManagementPage() {
           </div>
 
           {/* Info alert */}
-          <div className="px-5 py-3 border-b border-neutral-fillLow">
+          <div className="px-5 py-3">
             <KsInlineAlert
               variant="info"
               closeable
